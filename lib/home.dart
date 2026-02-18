@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
   int connectedCellId = 1;
 
   final int tttInMs = 3000;
-  final double hom = 30;
+  final double hom = 100;
 
   final double iconSize = 50;
 
@@ -219,7 +219,14 @@ class _HomeState extends State<Home> {
       },
     );
 
-    final bool cell2Optimal = !cell1Optimal;
+    final bool cell2Optimal = await checkConditionForTime(
+      duration: ttt,
+      tttCallback: () {
+        final cell1SSR = getSSR(userPos: userPos, cellPos: cell1Pos);
+        final cell2SSR = getSSR(userPos: userPos, cellPos: cell2Pos);
+        return cell1SSR > cell2SSR;
+      },
+    );
 
     if (cell1Optimal && connectedCellId != 1) {
       setState(() {
