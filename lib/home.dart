@@ -148,6 +148,22 @@ class _HomeState extends State<Home> {
                         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                     userAgentPackageName: "com.example.handover_simulator",
                   ),
+                  PolylineLayer(
+                    polylines: <Polyline>[
+                      // tower 1
+                      Polyline(
+                        points: [userPos, cell1Pos],
+                        strokeWidth: 3,
+                        color: connectedCellId == 1 ? Colors.green : Colors.red,
+                      ),
+                      // tower 2
+                      Polyline(
+                        points: [userPos, cell2Pos],
+                        strokeWidth: 3,
+                        color: connectedCellId == 2 ? Colors.green : Colors.red,
+                      ),
+                    ],
+                  ),
 
                   DragMarkers(
                     markers: [
@@ -197,22 +213,6 @@ class _HomeState extends State<Home> {
                             checkHandover();
                           });
                         },
-                      ),
-                    ],
-                  ),
-                  PolylineLayer(
-                    polylines: <Polyline>[
-                      // tower 1
-                      Polyline(
-                        points: [userPos, cell1Pos],
-                        strokeWidth: 3,
-                        color: connectedCellId == 1 ? Colors.green : Colors.red,
-                      ),
-                      // tower 2
-                      Polyline(
-                        points: [userPos, cell2Pos],
-                        strokeWidth: 3,
-                        color: connectedCellId == 2 ? Colors.green : Colors.red,
                       ),
                     ],
                   ),
