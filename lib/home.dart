@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
       final double shiftRadius = 2e-4;
       userPos = homePos;
       cell1Pos = homePos.add(toLat: shiftRadius, toLong: shiftRadius);
-      cell2Pos = homePos.add(toLat: -shiftRadius, toLong: -shiftRadius);
+      cell2Pos = homePos.add(toLat: -2 * shiftRadius, toLong: -2 * shiftRadius);
       connectedCellId = userPos.distance(cell1Pos) < userPos.distance(cell2Pos)
           ? 1
           : 2;
