@@ -41,8 +41,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((t) {
-      homController = TextEditingController(text: "120");
-      tttController = TextEditingController(text: "3000");
+      homController = TextEditingController(text: hom.toString());
+      tttController = TextEditingController(text: tttInMs.toString());
 
       final double shiftRadius = 2e-4;
       userPos = homePos;
