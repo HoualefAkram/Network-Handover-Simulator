@@ -16,8 +16,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int tttInMs = 3000;
-  double hom = 120;
+  int tttInMs = 0;
+  double hom = 0;
 
   late TextEditingController homController;
   late TextEditingController tttController;
