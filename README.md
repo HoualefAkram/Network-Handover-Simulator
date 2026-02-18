@@ -2,7 +2,7 @@
 
 A visual cellular handover simulator built with Flutter.
 
-This app demonstrates how Handover Margin (HOM) and Time-To-Trigger (TTT) affect handover decisions between two base stations using a simple RSS (distance-based) model.
+This app demonstrates how Handover Margin (HOM) and Time-To-Trigger (TTT) affect handover decisions between two base stations using a simple RSRP (distance-based) model.
 
 It is useful for understanding LTE/5G mobility concepts in a visual and interactive way.
 
@@ -14,7 +14,7 @@ It is useful for understanding LTE/5G mobility concepts in a visual and interact
 - Draggable User
 - Draggable Cell Tower 1
 - Draggable Cell Tower 2
-- Live RSS calculation (distance-based)
+- Live RSP calculation (distance-based)
 - Handover logic using:
   - Handover Margin (HOM)
   - Time-To-Trigger (TTT)
@@ -26,11 +26,11 @@ It is useful for understanding LTE/5G mobility concepts in a visual and interact
 
 ## 🧠 Concepts Simulated
 
-### 1️⃣ RSS (Received Signal Strength)
+### 1️⃣ RSRP (Reference Signal Received Power)
 
 Currently modeled as:
 
-RSS = distance(user, cell)
+RSRP = distance(user, cell)
 
 Lower distance = better signal (simplified model).
 
@@ -40,7 +40,7 @@ Lower distance = better signal (simplified model).
 
 Handover is only considered if:
 
-|RSS1 - RSS2| >= HOM
+|RSRP1 - RSRP2| >= HOM
 
 Increasing HOM:
 - Requires a larger difference between towers
@@ -82,7 +82,7 @@ Initializes the app and loads Home.
 Contains:
 - Map UI
 - Drag logic
-- RSS calculation
+- RSRP calculation
 - HOM & TTT logic
 - Handover state management
 
@@ -95,13 +95,13 @@ Custom LatLng extension:
 
 ## ⚙️ How It Works
 
-1. RSS is recalculated every time:
+1. RSRP is recalculated every time:
    - User moves
    - A tower moves
 
 2. If:
-   - Target tower has better RSS
-   - AND RSS difference ≥ HOM
+   - Target tower has better RSRP
+   - AND RSRP difference ≥ HOM
    → TTT starts
 
 3. If condition remains valid for full TTT:
@@ -116,7 +116,7 @@ Custom LatLng extension:
    - HOM
    - TTT (ms)
 3. Observe:
-   - RSS values
+   - RSRP values
    - TTT status
    - Connected tower
 

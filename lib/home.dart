@@ -27,10 +27,10 @@ class _HomeState extends State<Home> {
   LatLng cell2Pos = homePos;
   LatLng userPos = homePos;
 
-  double rssCell1 = 0;
-  double rssCell2 = 0;
+  double rsrpCell1 = 0;
+  double rsrpCell2 = 0;
 
-  double userCell1Cell2RSSDiff = 0;
+  double userCell1Cell2RSRPDiff = 0;
 
   int connectedCellId = 1;
 
@@ -227,10 +227,10 @@ class _HomeState extends State<Home> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text("TOWER: $connectedCellId"),
-                    Text("RSS TOWER 1: $rssCell1"),
-                    Text("RSS TOWER 2: $rssCell2"),
+                    Text("RSRP TOWER 1: $rsrpCell1"),
+                    Text("RSRP $rsrpCell2"),
                     Text(
-                      "User - Cell 1 RSS - Cell 2 RSS Diff: $userCell1Cell2RSSDiff",
+                      "User - Cell 1 RSRP - Cell 2 RSRP Diff: $userCell1Cell2RSRPDiff",
                     ),
                     Text("TTT MOVING: $tttStarted"),
                   ],
@@ -273,15 +273,15 @@ class _HomeState extends State<Home> {
   }
 
   void checkHandover() {
-    rssCell1 = getSSR(userPos: userPos, cellPos: cell1Pos);
-    rssCell2 = getSSR(userPos: userPos, cellPos: cell2Pos);
+    rsrpCell1 = getSSR(userPos: userPos, cellPos: cell1Pos);
+    rsrpCell2 = getSSR(userPos: userPos, cellPos: cell2Pos);
 
-    userCell1Cell2RSSDiff = (rssCell1 - rssCell2).abs();
-    final bool homSat = userCell1Cell2RSSDiff >= hom;
+    userCell1Cell2RSRPDiff = (rsrpCell1 - rsrpCell2).abs();
+    final bool homSat = userCell1Cell2RSRPDiff >= hom;
 
     bool shouldStartTTT =
-        (rssCell1 < rssCell2 && connectedCellId == 2 && homSat) ||
-        (rssCell2 < rssCell1 && connectedCellId == 1 && homSat);
+        (rsrpCell1 < rsrpCell2 && connectedCellId == 2 && homSat) ||
+        (rsrpCell2 < rsrpCell1 && connectedCellId == 1 && homSat);
     if (shouldStartTTT) {
       tttStarted = true;
       tttCheck();
