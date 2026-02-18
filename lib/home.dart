@@ -228,7 +228,7 @@ class _HomeState extends State<Home> {
                   children: [
                     Text("TOWER: $connectedCellId"),
                     Text("RSRP TOWER 1: $rsrpCell1"),
-                    Text("RSRP $rsrpCell2"),
+                    Text("RSRP TOWER 2: $rsrpCell2"),
                     Text(
                       "User - Cell 1 RSRP - Cell 2 RSRP Diff: $userCell1Cell2RSRPDiff",
                     ),
