@@ -210,7 +210,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> tttCheck() async {
-    final Duration ttt = Duration(seconds: 3);
+    final Duration ttt = Duration(milliseconds: tttInMs);
     final bool cell1Optimal = await checkConditionForTime(
       duration: ttt,
       tttCallback: () {
