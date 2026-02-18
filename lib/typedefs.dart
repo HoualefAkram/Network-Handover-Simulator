@@ -1,0 +1,1 @@
+typedef TTTCallback = bool Function();
