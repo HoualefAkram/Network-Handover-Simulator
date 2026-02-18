@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
   int connectedCellId = 1;
 
   final int tttInMs = 3000;
-  final double hom = 30;
+  final double hom = 120;
 
   final double iconSize = 50;
 
@@ -198,10 +198,11 @@ class _HomeState extends State<Home> {
     rssCell2 = getSSR(userPos: userPos, cellPos: cell2Pos);
 
     userCell1Cell2RSSDiff = (rssCell1 - rssCell2).abs();
+    final bool homSat = userCell1Cell2RSSDiff >= hom;
 
     bool shouldStartTTT =
-        (rssCell1 < rssCell2 && connectedCellId == 2) ||
-        (rssCell2 < rssCell1 && connectedCellId == 1);
+        (rssCell1 < rssCell2 && connectedCellId == 2 && homSat) ||
+        (rssCell2 < rssCell1 && connectedCellId == 1 && homSat);
     if (shouldStartTTT) {
       tttStarted = true;
       tttCheck();
