@@ -16,6 +16,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int tttInMs = 3000;
+  double hom = 120;
+
+  late TextEditingController homController;
+  late TextEditingController tttController;
+
   static LatLng homePos = LatLng(51.509364, -0.128928);
   LatLng cell1Pos = homePos;
   LatLng cell2Pos = homePos;
@@ -28,9 +34,6 @@ class _HomeState extends State<Home> {
 
   int connectedCellId = 1;
 
-  final int tttInMs = 3000;
-  final double hom = 120;
-
   final double iconSize = 50;
 
   bool tttStarted = false;
@@ -38,6 +41,9 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((t) {
+      homController = TextEditingController(text: "120");
+      tttController = TextEditingController(text: "3000");
+
       final double shiftRadius = 2e-4;
       userPos = homePos;
       cell1Pos = homePos.add(toLat: shiftRadius, toLong: shiftRadius);
@@ -54,11 +60,84 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void dispose() {
+    homController.dispose();
+    tttController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       child: SafeArea(
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("Settings"),
+                  content: Column(
+                    mainAxisSize: .min,
+                    children: [
+                      TextField(
+                        controller: homController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hint: Text("HOM"),
+                          label: Text("HOM"),
+                        ),
+                      ),
+                      TextField(
+                        controller: tttController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hint: Text("TTT (ms)"),
+                          label: Text("TTT (ms)"),
+                        ),
+                      ),
+
+                      Row(
+                        mainAxisAlignment: .spaceAround,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+
+                              tttController.text = tttInMs.toString();
+                              homController.text = hom.toString();
+                            },
+                            child: const Text("Cancel"),
+                          ),
+
+                          TextButton(
+                            onPressed: () {
+                              final double? inputHome = double.tryParse(
+                                homController.text,
+                              );
+                              final int? inputttt = int.tryParse(
+                                tttController.text,
+                              );
+                              setState(() {
+                                hom = inputHome ?? hom;
+                                tttInMs = inputttt ?? tttInMs;
+                              });
+                              Navigator.of(context).pop();
+                              tttController.text = tttInMs.toString();
+                              homController.text = hom.toString();
+                            },
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            child: Icon(Icons.settings),
+          ),
           body: Stack(
             children: [
               FlutterMap(
