@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
 
   final double iconSize = 50;
 
-  bool isHandoverTriggered = false;
+  bool tttStarted = false;
 
   @override
   void initState() {
@@ -153,6 +153,7 @@ class _HomeState extends State<Home> {
                     Text(
                       "User - Cell 1 RSS - Cell 2 RSS Diff: $userCell1Cell2RSSDiff",
                     ),
+                    Text("TTT MOVING: $tttStarted"),
                   ],
                 ),
               ),
@@ -193,54 +194,44 @@ class _HomeState extends State<Home> {
   }
 
   void checkHandover() {
-    tttCheck();
-    // final cell1SSR = getSSR(userPos: userPos, cellPos: cell1Pos);
-    // final cell2SSR = getSSR(userPos: userPos, cellPos: cell2Pos);
+    final cell1SSR = getSSR(userPos: userPos, cellPos: cell1Pos);
+    final cell2SSR = getSSR(userPos: userPos, cellPos: cell2Pos);
 
-    // bool shouldStartTTT =
-    //     (cell1SSR > cell2SSR && connectedCellId == 2) ||
-    //     (cell2SSR > cell1SSR && connectedCellId == 1);
-    // if (shouldStartTTT) {
-    //   tttCheck();
-    // }
+    userCell1Cell2RSSDiff = (cell1SSR - cell2SSR).abs();
+
+    bool shouldStartTTT =
+        (cell1SSR < cell2SSR && connectedCellId == 2) ||
+        (cell2SSR < cell1SSR && connectedCellId == 1);
+    if (shouldStartTTT) {
+      tttStarted = true;
+      tttCheck();
+    }
   }
 
   Future<void> tttCheck() async {
-    ssrCell1 = getSSR(userPos: userPos, cellPos: cell1Pos);
-    ssrCell2 = getSSR(userPos: userPos, cellPos: cell2Pos);
+    final Duration ttt = Duration(seconds: 3);
+    final bool cell1Optimal = await checkConditionForTime(
+      duration: ttt,
+      tttCallback: () {
+        final cell1SSR = getSSR(userPos: userPos, cellPos: cell1Pos);
+        final cell2SSR = getSSR(userPos: userPos, cellPos: cell2Pos);
+        return cell1SSR < cell2SSR;
+      },
+    );
 
-    userCell1Cell2RSSDiff = (ssrCell1 - ssrCell2).abs();
+    final bool cell2Optimal = !cell1Optimal;
 
-    final bool changeCellId = userCell1Cell2RSSDiff > hom;
-
-    if (changeCellId) {
-      connectedCellId = ssrCell1 < ssrCell2 ? 1 : 2;
+    if (cell1Optimal && connectedCellId != 1) {
+      setState(() {
+        connectedCellId = 1;
+      });
     }
-
-    // return;
-
-    // final Duration ttt = Duration(seconds: 3);
-    // final bool cell1High = await checkConditionForTime(
-    //   duration: ttt,
-    //   tttCallback: () {
-    //     final cell1SSR = getSSR(userPos: userPos, cellPos: cell1Pos);
-    //     final cell2SSR = getSSR(userPos: userPos, cellPos: cell2Pos);
-    //     return cell1SSR > cell2SSR;
-    //   },
-    // );
-
-    // final bool cell2High = !cell1High;
-
-    // if (cell1High && connectedCellId != 1) {
-    //   setState(() {
-    //     connectedCellId = 1;
-    //   });
-    // }
-    // if (cell2High && connectedCellId != 2) {
-    //   setState(() {
-    //     connectedCellId = 2;
-    //   });
-    // }
+    if (cell2Optimal && connectedCellId != 2) {
+      setState(() {
+        connectedCellId = 2;
+      });
+    }
+    tttStarted = false;
   }
 
   double getSSR({required LatLng userPos, required LatLng cellPos}) {
